@@ -1,6 +1,6 @@
 # Structure du projet
 
-```json
+```text
 ec-frontend/
 ├── src/
 │   ├── assets/          # Images statiques, etc.
