@@ -1,6 +1,6 @@
 # Structure du projet Backend
 
-```json
+```text
 ec-backend/
 ├── src/
 │   ├── config/          # Configurations (DB connection)
