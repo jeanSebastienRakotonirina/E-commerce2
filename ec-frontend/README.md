@@ -43,3 +43,7 @@ ec-frontend/
 │       └── ci.yml       # CI/CD GitHub Actions
 └── README.md            # Instructions
 ```
+
+```javascript
+npm create vite@latest ec-frontend -- --template react
+```
