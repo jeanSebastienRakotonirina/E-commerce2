@@ -814,7 +814,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 - **Objectifs** : React/Redux. Testez UI-backend.
 - **Fichiers** :
 
-./ec-backend/package.json
+./ec-frontend/package.json
 
 ```json
 {
@@ -854,7 +854,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
 ```
 
-./ec-backend/.env
+./ec-frontend/.env
 
 ```text
 VITE_API_URL=http://localhost:5000/api
@@ -881,7 +881,7 @@ const theme = createTheme({
 export default theme;
 ```
 
-./ec-frontend/src/index.js
+./ec-frontend/src/main.jsx
 
 ```javascript
 import React from 'react';
@@ -947,7 +947,7 @@ api.interceptors.request.use((config) => {
 export default api;
 ```
 
-./ec-frontend/redux/store.js
+./ec-frontend/src/redux/store.js
 
 ```javascript
 import { configureStore } from '@reduxjs/toolkit';
@@ -964,7 +964,7 @@ const store = configureStore({
 export default store;
 ```
 
-./ec-frontend/src/slices/authSlice.js
+./ec-frontend/src/redux/slices/authSlice.js
 
 ```javascript
 
@@ -1002,7 +1002,7 @@ export const { logout } = authSlice.actions;
 export default authSlice.reducer;
 ```
 
-./ec-frontend/src/slices/productSlice.js
+./ec-frontend/src/redux/slices/productSlice.js
 
 ```javascript
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
@@ -1025,7 +1025,7 @@ const productSlice = createSlice({
 export default productSlice.reducer;
 ```
 
-./ec-frontend/src/Home.js
+./ec-frontend/src/pages/Home.js
 
 ```javascript
 import React from 'react';
