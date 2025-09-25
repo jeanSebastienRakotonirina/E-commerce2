@@ -7,6 +7,7 @@ import ProductList from './pages/ProductList';
 import Cart from './components/Cart';
 import Success from './pages/Success';
 import AddProduct from './pages/AddProduct';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/success" element={<Success />} />
         <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
