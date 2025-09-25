@@ -3,45 +3,93 @@
 ```text
 ec-backend/
 ├── src/
-│   ├── config/          # Configurations (DB connection)
+│   ├── config/
 │   │   └── db.js
-│   ├── controllers/     # Logique métier (business logic)
+│   ├── controllers/
 │   │   ├── authController.js
 │   │   ├── productController.js
 │   │   ├── cartController.js
 │   │   ├── orderController.js
 │   │   ├── paymentController.js
-│   │   └── adminController.js  # Ajouté pour dashboard admin
-│   ├── models/          # Schémas MongoDB (data models)
+│   │   └── adminController.js
+│   ├── models/
 │   │   ├── User.js
 │   │   ├── Product.js
 │   │   ├── Cart.js
 │   │   └── Order.js
-│   ├── routes/          # Routes API (endpoints)
+│   ├── routes/
 │   │   ├── authRoutes.js
 │   │   ├── productRoutes.js
 │   │   ├── cartRoutes.js
 │   │   ├── orderRoutes.js
 │   │   ├── paymentRoutes.js
-│   │   └── adminRoutes.js  # Ajouté pour dashboard admin
-│   ├── middleware/      # Middlewares (auth, validation, upload)
+│   │   └── adminRoutes.js
+│   ├── middleware/
 │   │   ├── authMiddleware.js
 │   │   ├── validateInput.js
 │   │   ├── uploadMiddleware.js
-│   │   └── adminMiddleware.js  # Ajouté pour dashboard admin
-│   ├── utils/           # Utilitaires (email, logger)
+│   │   └── adminMiddleware.js
+│   ├── utils/
 │   │   ├── email.js
-│   │   └── logger.js  # Ajouté pour logs Winston
-│   ├── tests/           # Tests unitaires (Jest)
-│   │   └── auth.test.js  # Exemple de test
-│   └── app.js           # Point d'entrée (entry point)
-├── .env                 # Variables d'environnement
-├── Dockerfile           # Conteneurisation
-├── docker-compose.yml   # Dev local avec MongoDB
-├── package.json         # Dépendances
+│   │   └── logger.js
+│   ├── tests/
+│   │   ├── auth.test.js
+│   │   └── admin.test.js
+│   └── app.js
+├── .env
+├── Dockerfile
+├── docker-compose.yml
+├── package.json
 ├── .github/
 │   └── workflows/
-│       └── ci.yml       # CI/CD GitHub Actions
-└── README.md            # Instructions
-
+│       └── ci.yml
+└── README.md
 ```
+
+## E-commerce Backend
+
+Description
+
+Backend pour une application e-commerce sécurisée avec Node.js, Express, MongoDB, Stripe, et Vercel Blob.
+
+Installation
+
+Clonez le dépôt: git clone
+
+Installez les dépendances: npm install
+
+Configurez .env (voir .env.example)
+
+Lancez MongoDB via Docker: docker-compose up -d
+
+Démarrez: npm start
+
+## Endpoints
+
+Auth: /api/auth/register, /api/auth/login, /api/auth/forgot, /api/auth/reset
+
+Produits: /api/products
+
+Panier: /api/cart
+
+Commandes: /api/orders
+
+Paiement: /api/payment/create-checkout-session, /api/payment/webhook
+
+Admin: /api/admin/users, /api/admin/orders
+
+## Tests
+
+```javascript
+npm test pour Jest/Supertest
+```
+
+Utilisez Postman pour tester les endpoints
+
+Déploiement
+
+Hébergez sur Vercel/Heroku
+
+Configurez MongoDB Atlas
+
+Ajoutez les variables d'environnement dans le dashboard du service
