@@ -1,10 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const Order = require('../models/Order');
+import { findById } from '../models/Order';
 
-exports.createCheckoutSession = async (req, res) => {
+export async function createCheckoutSession(req, res) {
   const { orderId, currency = 'usd' } = req.body;
   try {
-    const order = await Order.findById(orderId).populate('items.productId');
+    const order = await findById(orderId).populate('items.productId');
     if (!order) return res.status(404).json({ msg: 'Order not found' });
 
     const lineItems = order.items.map(item => ({
@@ -33,9 +33,9 @@ exports.createCheckoutSession = async (req, res) => {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
-};
+}
 
-exports.handleWebhook = async (req, res) => {
+export async function handleWebhook(req, res) {
   const sig = req.headers['stripe-signature'];
   let event;
 
@@ -49,7 +49,7 @@ exports.handleWebhook = async (req, res) => {
     const session = event.data.object;
     const orderId = session.metadata.orderId;
 
-    const order = await Order.findById(orderId);
+    const order = await findById(orderId);
     if (order) {
       order.status = 'paid';
       await order.save();
@@ -57,4 +57,4 @@ exports.handleWebhook = async (req, res) => {
   }
 
   res.json({ received: true });
-};
+}
