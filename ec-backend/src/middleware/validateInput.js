@@ -1,15 +1,8 @@
-const validateInput = (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ msg: 'Email and password are required' });
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ msg: 'Invalid email format' });
-  }
-  if (password.length < 6) {
-    return res.status(400).json({ msg: 'Password must be at least 6 characters' });
+module.exports = (fields) => (req, res, next) => {
+  for (const field of fields) {
+    if (!req.body[field]) {
+      return res.status(400).json({ msg: `Missing ${field}` });
+    }
   }
   next();
 };
-
-module.exports = validateInput;
