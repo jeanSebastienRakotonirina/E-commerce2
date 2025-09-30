@@ -1,9 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const logger = require('./utils/logger');
+
+// Debug: Vérifier que STRIPE_SECRET_KEY est chargé
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.error('Erreur : STRIPE_SECRET_KEY non défini dans .env');
+} else {
+  console.log('STRIPE_SECRET_KEY chargé avec succès');
+}
 
 const app = express();
 

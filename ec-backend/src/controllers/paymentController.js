@@ -1,15 +1,19 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || '');
+const stripe = process.env.STRIPE_SECRET_KEY ? require('stripe')(process.env.STRIPE_SECRET_KEY) : null;
 const Order = require('../models/Order');
 
 if (!process.env.STRIPE_SECRET_KEY) {
-  console.error('STRIPE_SECRET_KEY is not defined in environment variables');
+  console.error('Erreur : STRIPE_SECRET_KEY non défini. Vérifiez le fichier .env.');
 }
 
 exports.createCheckoutSession = async (req, res) => {
+  if (!stripe) {
+    return res.status(500).json({ msg: 'Stripe n’est pas configuré correctement. Contactez l’administrateur.' });
+  }
+
   const { orderId, currency = 'usd' } = req.body;
   try {
     const order = await Order.findById(orderId).populate('items.productId');
-    if (!order) return res.status(404).json({ msg: 'Order not found' });
+    if (!order) return res.status(404).json({ msg: 'Commande non trouvée' });
 
     const lineItems = order.items.map(item => ({
       price_data: {
@@ -34,20 +38,24 @@ exports.createCheckoutSession = async (req, res) => {
 
     res.json({ id: session.id });
   } catch (err) {
-    console.error('Stripe error:', err.message);
-    res.status(500).json({ msg: 'Server error: ' + err.message });
+    console.error('Erreur Stripe:', err.message);
+    res.status(500).json({ msg: 'Erreur serveur: ' + err.message });
   }
 };
 
 exports.handleWebhook = async (req, res) => {
+  if (!stripe) {
+    return res.status(500).json({ msg: 'Stripe n’est pas configuré correctement. Contactez l’administrateur.' });
+  }
+
   const sig = req.headers['stripe-signature'];
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('Webhook error:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    console.error('Erreur Webhook:', err.message);
+    return res.status(400).send(`Erreur Webhook: ${err.message}`);
   }
 
   if (event.type === 'checkout.session.completed') {
