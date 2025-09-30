@@ -1,8 +1,11 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 
-const Home = () => {
-  return <Typography variant="h2">Bienvenue sur l'E-commerce Sécurisé</Typography>;
-};
+const Home = () => (
+  <Box>
+    <Typography variant="h2">Welcome to E-commerce</Typography>
+    <Typography variant="h5">Explore our products!</Typography>
+  </Box>
+);
 
 export default Home;
