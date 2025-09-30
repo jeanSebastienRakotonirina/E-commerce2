@@ -1,13 +1,11 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
 
-const Success = () => {
-  return (
-    <Box>
-      <Typography variant="h4">Paiement Réussi !</Typography>
-      <Typography>Votre commande a été confirmée.</Typography>
-    </Box>
-  );
-};
+const Success = () => (
+  <Box>
+    <Typography variant="h4">Payment Successful</Typography>
+    <Typography>Thank you for your purchase!</Typography>
+  </Box>
+);
 
 export default Success;

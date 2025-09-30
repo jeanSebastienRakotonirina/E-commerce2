@@ -1,40 +1,30 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCart } from '../redux/slices/cartSlice';
-import { createOrder, createCheckoutSession } from '../redux/slices/orderSlice';
-import { List, ListItem, Typography, Button } from '@mui/material';
-import { loadStripe } from '@stripe/stripe-js';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../services/api';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, quantity }) => {
+  const res = await api.post('/cart', { productId, quantity });
+  return res.data;
+});
 
-const Cart = () => {
-  const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.cart);
-  const { sessionId } = useSelector((state) => state.orders);
+export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
+  const res = await api.get('/cart');
+  return res.data;
+});
 
-  useEffect(() => {
-    dispatch(getCart());
-  }, [dispatch]);
+export const removeFromCart = createAsyncThunk('cart/removeFromCart', async ({ productId }) => {
+  const res = await api.delete('/cart', { data: { productId } });
+  return res.data;
+});
 
-  const handleCheckout = async () => {
-    const { payload: order } = await dispatch(createOrder());
-    const { payload: session } = await dispatch(createCheckoutSession(order._id));
-    const stripe = await stripePromise;
-    await stripe.redirectToCheckout({ sessionId: session.id });
-  };
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState: { items: [], loading: false },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addToCart.fulfilled, (state, action) => { state.items = action.payload.items; })
+      .addCase(fetchCart.fulfilled, (state, action) => { state.items = action.payload.items; })
+      .addCase(removeFromCart.fulfilled, (state, action) => { state.items = action.payload.items; });
+  },
+});
 
-  return (
-    <>
-      <List>
-        {items.map((item) => (
-          <ListItem key={item.productId._id}>
-            <Typography>{item.productId.name} x {item.quantity}</Typography>
-          </ListItem>
-        ))}
-      </List>
-      <Button onClick={handleCheckout} variant="contained">Proceed to Checkout</Button>
-    </>
-  );
-};
-
-export default Cart;
+export default cartSlice.reducer;
