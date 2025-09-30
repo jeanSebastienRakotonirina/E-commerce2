@@ -2,6 +2,7 @@
 
 ```text
 ec-frontend/
+frontend/
 ├── src/
 │   ├── assets/
 │   ├── components/
@@ -45,7 +46,8 @@ ec-frontend/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml
-└── README.md```
+└── README.md
+```
 
 ```javascript
 npm create vite@latest ec-frontend -- --template react
