@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from '@mui/material/styles';
 import store from './redux/store';
-import theme from './theme';
-import App from './App';
+import App from './App.jsx';
 import './index.css';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <App />
