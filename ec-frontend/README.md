@@ -2,7 +2,6 @@
 
 ```text
 ec-frontend/
-frontend/
 ├── src/
 │   ├── assets/
 │   ├── components/
