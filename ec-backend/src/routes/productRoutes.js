@@ -1,11 +1,11 @@
-
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 const authMiddleware = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
+router.post('/', authMiddleware, upload.single('image'), productController.addProduct);
 router.get('/', productController.getProducts);
-router.post('/', authMiddleware, upload.single('image'), productController.createProduct);
+router.get('/:id', productController.getProduct);
 
 module.exports = router;

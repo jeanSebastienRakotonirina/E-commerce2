@@ -1,40 +1,40 @@
-
 const Product = require('../models/Product');
-const { put } = require('@vercel/blob');
+const { BlobServiceClient } = require('@azure/storage-blob');
+
+exports.addProduct = async (req, res) => {
+  const { name, description, price, color, size, stock } = req.body;
+  try {
+    const product = new Product({ name, description, price, color, size, stock });
+    if (req.file) {
+      const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.VERCEL_BLOB_TOKEN);
+      const containerClient = blobServiceClient.getContainerClient('images');
+      const blobName = `${Date.now()}-${req.file.originalname}`;
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      await blockBlobClient.upload(req.file.buffer, req.file.size);
+      product.imageUrl = blockBlobClient.url;
+    }
+    await product.save();
+    res.status(201).json(product);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
 
 exports.getProducts = async (req, res) => {
-  const { name, color, size, description } = req.query;
-  let query = {};
-  if (name) query.name = { $regex: name, $options: 'i' };
-  if (color) query.color = color;
-  if (size) query.size = size;
-  if (description) query.description = { $regex: description, $options: 'i' };
-
   try {
-    const products = await Product.find(query);
+    const products = await Product.find();
     res.json(products);
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
   }
 };
 
-exports.createProduct = async (req, res) => {
-  const { name, description, price, color, size, stock } = req.body;
-  const file = req.file;
-
-  if (!file) return res.status(400).json({ msg: 'No image uploaded' });
-
+exports.getProduct = async (req, res) => {
   try {
-    const { url } = await put(file.originalname, file.buffer, {
-      access: 'public',
-      token: process.env.VERCEL_BLOB_TOKEN,
-    });
-
-    const product = new Product({ name, description, price, color, size, stock, imageUrl: url });
-    await product.save();
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ msg: 'Product not found' });
     res.json(product);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'Upload failed' });
+    res.status(500).json({ msg: 'Server error' });
   }
 };
