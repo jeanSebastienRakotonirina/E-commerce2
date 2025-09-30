@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../services/api';
 
-export const getProducts = createAsyncThunk('products/get', async (filters) => {
-  const params = new URLSearchParams(filters);
-  const res = await api.get(`/products?${params.toString()}`);
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+  const res = await api.get('/products');
   return res.data;
 });
 
-export const createProduct = createAsyncThunk('products/create', async (data) => {
-  const res = await api.post('/products', data, {
+export const addProduct = createAsyncThunk('products/addProduct', async (formData) => {
+  const res = await api.post('/products', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
   return res.data;
@@ -16,11 +15,11 @@ export const createProduct = createAsyncThunk('products/create', async (data) =>
 
 const productSlice = createSlice({
   name: 'products',
-  initialState: { list: [], loading: false },
+  initialState: { products: [], loading: false },
   extraReducers: (builder) => {
     builder
-      .addCase(getProducts.fulfilled, (state, action) => { state.list = action.payload; })
-      .addCase(createProduct.fulfilled, (state, action) => { state.list.push(action.payload); });
+      .addCase(fetchProducts.fulfilled, (state, action) => { state.products = action.payload; })
+      .addCase(addProduct.fulfilled, (state, action) => { state.products.push(action.payload); });
   },
 });
 
